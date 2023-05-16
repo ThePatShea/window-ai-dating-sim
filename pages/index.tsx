@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import Image from 'next/image';
 import Link from 'next/link';
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -157,7 +158,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <img src="/datecity-bg.jpg" alt="DateCity Background" className="fixed z-0 blur-sm"/>
+      <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
       <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black">
         <h1 className="text-3xl font-bold mb-4 text-center">DateCity: A Window.AI Experience</h1>
         <div className="overflow-y-auto h-96 mb-4">
