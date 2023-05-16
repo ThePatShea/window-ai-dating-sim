@@ -185,12 +185,12 @@ const App: React.FC = () => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className={`flex-grow border-2 border-black bg-sky-200 rounded-lg p-2 focus:outline-none focus:border-violet-800 text-lg font-semibold ${messages.length === 0 && 'hidden'}`}
+            className={`flex-grow border-2 border-black bg-sky-200 focus:bg-sky-300 rounded-lg p-2 focus:outline-none text-lg font-semibold ${messages.length === 0 && 'hidden'}`}
           />
           <button
             type="submit"
             disabled={loading}
-            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
+            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
           >
             {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
           </button>
