@@ -165,7 +165,7 @@ const App: React.FC = () => {
             <div className={`p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold bg-violet-200 text-black`}>
               <div className='mb-4'>Welcome to DateCity!</div>
               <div className='mb-4'>In this dating sim, you have 100 days to take a woman home with you.</div>
-              <div className='mb-4'>In this world, you can go to school, work out at the gym, get a job, and go to the bar to pick up women.</div>
+              <div className='mb-4'>In this world, you can go to school, work out at the gym, get a job, shop at the mall, and go to the bar to pick up women.</div>
               <div className='mb-4'>You will need to level up your stats and earn money to become a man who women want.</div>
               <div className='mb-4'>DateCity is an infinite world where you can do almost anything. Everything you do will impact your progress toward your goal of taking home a woman. If you wish to do something not listed here, simply type it in and watch it happen!</div>
             </div>
