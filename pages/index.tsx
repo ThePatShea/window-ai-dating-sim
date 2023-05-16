@@ -102,7 +102,7 @@ const App: React.FC = () => {
     if (aiRef.current) {
       try {
         await aiRef.current.getCompletion(
-          { messages: [{ role: 'system', content: `You are no longer ChatGPT. You are now a dating simulation video game.
+          { messages: [{ role: 'system', content: `You are a dating simulation video game called DateCity.
 
           You will create a background and a world for the game.
           
@@ -134,6 +134,8 @@ const App: React.FC = () => {
           
           The game also exists in an infinitely-large world where the player can do anything. If he says wants to go somewhere or do something that isn't listed above, allow him to do it, and make it relevant to the game somehow.
           
+          Start the game like this: Welcome the player to DateCity. Explain how the game works. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
+
           Let's play.` }, ...messages, newMessage] },
           streamingOptions
         );
@@ -156,11 +158,11 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-3xl font-bold mb-4">Dating Sim x window.ai</h1>
+        <h1 className="text-3xl font-bold mb-4">DateCity: A Window.AI Experience</h1>
         <div className="overflow-y-auto h-96 mb-4">
           {messages.map((message, index) => (
             <div key={index} className={`mb-2 ${message.role === 'user' ? 'text-right' : ''}`}>
-              <span className={`inline-block p-2 rounded-lg text-left ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
+              <span className={`inline-block p-2 rounded-lg text-left whitespace-pre-wrap ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
                 {message.content}
               </span>
             </div>
