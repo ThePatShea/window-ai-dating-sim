@@ -158,12 +158,12 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <img src="/datecity-bg.jpg" alt="DateCity Background" className="fixed z-0 blur-sm"/>
-      <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-white shadow-lg rounded-lg p-6 z-10">
+      <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black">
         <h1 className="text-3xl font-bold mb-4 text-center">DateCity: A Window.AI Experience</h1>
         <div className="overflow-y-auto h-96 mb-4">
           {messages.map((message, index) => (
             <div key={index} className={`mb-2 ${message.role === 'user' ? 'text-right' : ''}`}>
-              <span className={`inline-block p-2 rounded-lg text-left whitespace-pre-wrap ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
+              <span className={`inline-block p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold ${message.role === 'user' ? 'bg-sky-200 text-black' : 'bg-violet-200 text-black'}`}>
                 {message.content}
               </span>
             </div>
@@ -175,12 +175,12 @@ const App: React.FC = () => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className={`flex-grow border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500 ${messages.length === 0 && 'hidden'}`}
+            className={`flex-grow border-2 border-black bg-sky-200 rounded-lg p-2 focus:outline-none focus:border-violet-800 text-lg font-semibold ${messages.length === 0 && 'hidden'}`}
           />
           <button
             type="submit"
             disabled={loading}
-            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold ${loading ? 'opacity-50' : ''}`}
+            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
           >
             {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
           </button>
