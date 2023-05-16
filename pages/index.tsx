@@ -8,7 +8,7 @@ interface Message {
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>('Start Game');
   const [loading, setLoading] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
@@ -175,14 +175,14 @@ const App: React.FC = () => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="flex-grow border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500"
+            className={`flex-grow border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500 ${messages.length === 0 && 'hidden'}`}
           />
           <button
             type="submit"
             disabled={loading}
-            className={`ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold ${loading ? 'opacity-50' : ''}`}
+            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold ${loading ? 'opacity-50' : ''}`}
           >
-            {loading ? 'Sending...' : 'Send'}
+            {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
           </button>
         </form>
       </div>
