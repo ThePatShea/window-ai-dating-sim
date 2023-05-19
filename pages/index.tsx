@@ -199,9 +199,6 @@ Let's play.
     intelligence: parseInt(statsMessage.substring(statsMessage.indexOf('Intelligence:') + 14, statsMessage.length).trim()) || 10,
   }
 
-  console.log("pVarsContent:",pVarsContent);
-  console.log("playerVariables:",playerVariables);
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
