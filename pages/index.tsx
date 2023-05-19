@@ -25,7 +25,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
-    const savedMessages: Message[] = JSON.parse(savedMessagesString || '');
+    const savedMessages: Message[] = savedMessagesString ? JSON.parse(savedMessagesString) : '';
 
     if (savedMessages) {
       setMessages(savedMessages);
