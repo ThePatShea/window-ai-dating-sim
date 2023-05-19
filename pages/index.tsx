@@ -135,13 +135,13 @@ const App: React.FC = () => {
                   
           The player also has an HP meter that starts at 100. Every action the player does decreases his HP. If he has less HP than the action costs, he can't do the action. When his HP reaches 0, the only action he can take is to go home and go to sleep. When he goes to sleep, his HP returns to 100.
                   
-          The game also has a day counter that starts at 0. Every time the player goes to sleep, the day counter increases by 1. If the day counter reaches 100 and the player hasn't taken a woman home, he loses the game.
+          The game also has a day counter that starts at 0. Every time the player goes to sleep, the day counter increases by 1. If the day counter reaches 10 and the player hasn't taken a woman home, he loses the game.
                   
           The game also exists in an infinitely-large world where the player can do anything. If he says wants to go somewhere or do something that isn't listed above, allow him to do it, and make it relevant to the game somehow.
                   
           Start the game like this: Welcome the player to DateCity. Explain how the game works. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
           
-          Let's play.                             
+          Let's play.                                       
           ` }, ...messages, newMessage] },
           streamingOptions
         );
@@ -172,7 +172,7 @@ const App: React.FC = () => {
           {messages.length === 0 && (
             <div className={`p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold bg-violet-200 text-black`}>
               <div className='mb-4'>Welcome to DateCity!</div>
-              <div className='mb-4'>In this dating sim, you have 100 days to take a woman home with you.</div>
+              <div className='mb-4'>In this dating sim, you have 10 days to take a woman home with you.</div>
               <div className='mb-4'>In this world, you can go to school, work out at the gym, get a job, shop at the mall, and go to the bar to pick up women.</div>
               <div className='mb-4'>You will need to level up your stats and earn money to become a man who women want.</div>
               <div className='mb-4'>DateCity is an infinite world where you can do almost anything. Everything you do will impact your progress toward your goal of taking home a woman. If you wish to do something not listed here, simply type it in and watch it happen!</div>
