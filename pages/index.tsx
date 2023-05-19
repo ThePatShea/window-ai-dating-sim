@@ -111,7 +111,7 @@ const App: React.FC = () => {
           
           At the beginning of the game, you will ask the player to provide you with his name. Then, you will ask him to describe his type (the type of women he is most attracted to). He can describe in as much detail as he wants to. He can include physical features and personality traits in his type. DO NOT just write [player enters name] and [player describes type]. You should actually stop and ask the player to provide his name and describe his type.
                   
-          The player can go to the bar and talk to women. When the player goes to the bar, you will describe all of the women he sees in great detail. Many of the women (but not all of them) will be very similar to the player’s type (the type of women he is most attracted to) that he described at the beginning of the game. DO NOT simply say something like “many of the women are your type”. Describe in detail at least 3 women at the bar, then let the player choose which women to talk to.
+          The player can go to the bar and talk to women. When the player goes to the bar, you will describe all of the women he sees in great detail. Many of the women (but not all of them) will be very similar to the player’s type (the type of women he is most attracted to) that he described at the beginning of the game. DO NOT simply say something like “many of the women are your type”. Describe in detail at least 3 women at the bar, then let the player choose which women to talk to. Some of the women at the bar are there with their friends; in that scenario, the player needs to talk to the whole group of friends.
           
           The goal of the game is for the player to get a woman to come home with him. Every woman starts out with an attraction score of 0, which indicates how attracted she is to the player. Positive interactions increase the woman's attraction score. Negative interactions decrease the woman's attraction score. The minimum attraction score is -100. The maximum attraction score is 100. As a woman's attraction score increases, she becomes closer with the player, unlocking more things they can do together. If her attraction score reaches 100, she will agree to come home with the player if he invites her to come home with him. When the player takes her home with him, he wins the game.
                   
@@ -141,7 +141,7 @@ const App: React.FC = () => {
                   
           Start the game like this: Welcome the player to DateCity. Explain how the game works. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
           
-          Let's play.          
+          Let's play.                    
           ` }, ...messages, newMessage] },
           streamingOptions
         );
