@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState<string>('Start Game');
   const [loading, setLoading] = useState<boolean>(false);
+  const [windowInstalled, setWindowInstalled] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
 
@@ -45,6 +46,7 @@ const App: React.FC = () => {
         toast.success('window.ai detected!', {
           id: 'window-ai-detected',
         });
+        setWindowInstalled(true);
       }
       
     };
@@ -268,14 +270,39 @@ Let's play.
             onChange={(e) => setInputValue(e.target.value)}
             className={`flex-grow border-2 border-black bg-sky-200 focus:bg-sky-300 rounded-lg p-2 focus:outline-none text-lg font-semibold ${messages.length === 0 && 'hidden'}`}
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
-          >
-            {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
-          </button>
+
+          {
+            windowInstalled && (
+              <button
+                type="submit"
+                disabled={loading}
+                className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
+              >
+                {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
+              </button>
+            )
+          }
         </form>
+
+        {
+          !windowInstalled && (
+            <div className="flex justify-center">
+              <Link
+                href="https://windowai.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold"
+              >
+                <button
+                  className={`border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold`}
+                >
+                  Install Window.AI
+                </button>
+              </Link>
+            </div>
+           
+          )
+        }
       </div>
       <Toaster />
     </div>
