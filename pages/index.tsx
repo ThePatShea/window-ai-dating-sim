@@ -108,8 +108,12 @@ const App: React.FC = () => {
           You will create a background and a world for the game.
           
           The game takes place in a city that contains a bar, a university, a restaurant, a gym, a mall, and a house. The player of the game lives in the house.
+          
+          At the beginning of the game, you will ask the player to provide you with his name. Then, you will ask him to describe his type (the type of women he is most attracted to). He can describe in as much detail as he wants to. He can include physical features and personality traits in his type.
                   
-          The player can go to the bar and talk to women. The goal of the game is for the player to get a woman to come home with him. Every woman starts out with an attraction score of 0, which indicates how attracted she is to the player. Positive interactions increase the woman's attraction score. Negative interactions decrease the woman's attraction score. The minimum attraction score is -100. The maximum attraction score is 100. As a woman's attraction score increases, she becomes closer with the player, unlocking more things they can do together. If her attraction score reaches 100, she will agree to come home with the player if he invites her to come home with him. When the player takes her home with him, he wins the game.
+          The player can go to the bar and talk to women. When the player goes to the bar, you will describe all of the women he sees in great detail. Many of the women (but not all of them) will be very similar to the player’s type (the type of women he is most attracted to) that he described at the beginning of the game.
+          
+          The goal of the game is for the player to get a woman to come home with him. Every woman starts out with an attraction score of 0, which indicates how attracted she is to the player. Positive interactions increase the woman's attraction score. Negative interactions decrease the woman's attraction score. The minimum attraction score is -100. The maximum attraction score is 100. As a woman's attraction score increases, she becomes closer with the player, unlocking more things they can do together. If her attraction score reaches 100, she will agree to come home with the player if he invites her to come home with him. When the player takes her home with him, he wins the game.
                   
           For each woman the player talks to, you will provide the player with 3 options for what to say to her, plus a 4th option where the player gets to write something custom to say to her. One of the 3 options you give should be a negative option that causes the player to say something that decreases the woman’s attraction score. Don’t put the negative option in the same order in the list every time; change it up. Keep the custom option as the 4th option every time. Then, you'll figure out how many points that response will add or subtract from her attraction score. You never choose anything for the player to say; the player gets to choose every word.
                   
@@ -138,10 +142,7 @@ const App: React.FC = () => {
           Start the game like this: Welcome the player to DateCity. Explain how the game works. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
           
           Let's play.
-          
-          
-          
-                  
+                      
           ` }, ...messages, newMessage] },
           streamingOptions
         );
