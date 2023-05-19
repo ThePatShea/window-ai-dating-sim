@@ -18,6 +18,19 @@ const App: React.FC = () => {
   const activeMessages: Message[] = messages.filter(message => message.content !== 'Start Game');
 
   useEffect(() => {
+    if (messages.length > 0) {
+      window.localStorage.setItem("dateCityMessages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
+    const savedMessages: Message[] = JSON.parse(savedMessagesString ?? '');
+
+    if (savedMessages) {
+      setMessages(savedMessages);
+    }
+
     const waitForAI = async () => {
       let timeoutCounter = 0;
       while (!(window as any).ai) {
@@ -52,6 +65,7 @@ const App: React.FC = () => {
       }
       
     };
+
     waitForAI();
   }, []);
 
