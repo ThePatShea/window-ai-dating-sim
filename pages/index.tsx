@@ -161,6 +161,8 @@ const App: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
+  const activeMessages: Message[] = messages.slice(1);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
@@ -176,7 +178,7 @@ const App: React.FC = () => {
               <div className='mb-4'>DateCity is an infinite world where you can do almost anything. Everything you do will impact your progress toward your goal of taking home a woman. If you wish to do something not listed here, simply type it in and watch it happen!</div>
             </div>
           )}
-          {messages.map((message, index) => (
+          {activeMessages.map((message, index) => (
             <div key={index} className={`mb-2 ${message.role === 'user' ? 'text-right' : ''}`}>
               <span className={`inline-block p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold ${message.role === 'user' ? 'bg-sky-200 text-black' : 'bg-violet-200 text-black'}`}>
                 {message.content}
