@@ -156,19 +156,11 @@ First, show the following warning, exactly like this:
 Then, welcome the player to DateCity. Explain how the game works. Do not mention that this game is challenging and difficult. Do not mention that the people in this game are all horrible. Just act like everything is totally normal. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
 At the end of everything you say, you will report all of the player’s variables. For example, if it is day 3 and the player has a strength stat of 25, an intelligence stat of 15, he has 20 HP, and he has $235, you’ll write this:
 
-<variables>
-    <day>3</day>
-    <strength>25</strength>
-    <intelligence>15</intelligence>
-    <hp>15</hp>
-    <money>235</money>
-</variables>
+[Stats] Day: 3 | HP: 15 | Money: 235 | Strength: 25 | Intelligence: 15 [Stats]
 
 Never call the “intelligence” variable by the name “knowledge”. It is always “intelligence”.
 
 Let's play.
-
-          
           ` }, ...messages, newMessage] },
           streamingOptions
         );
@@ -190,23 +182,19 @@ Let's play.
 
   const activeMessages: Message[] = messages.slice(1);
 
-  const latestPlayerVariablesMessage: Message | undefined = activeMessages.slice().reverse().find((message) => {
-    const playerVariablesStart: number = message.content.indexOf('<variables>');
-    const playerVariablesEnd: number = message.content.indexOf('</variables>');
-
-    if (playerVariablesStart > -1 && playerVariablesEnd > -1) {
-      return true;
-    }
-  });
+  const latestPlayerVariablesMessage: Message | undefined = activeMessages.slice().reverse().find((message) => message.content.indexOf('[Stats]') > -1);
 
   const pVarsContent: string = latestPlayerVariablesMessage?.content || '';
 
+  let statsMessage: string = pVarsContent.substring(pVarsContent.indexOf('[Stats]') + 7, pVarsContent.length);
+  statsMessage = statsMessage.substring(0, statsMessage.indexOf('[Stats]'));
+
   const playerVariables = {
-    day: parseInt(pVarsContent.substring(pVarsContent.indexOf('<day>') + 5, pVarsContent.indexOf('</day>'))) || 0,
-    strength: parseInt(pVarsContent.substring(pVarsContent.indexOf('<strength>') + 10, pVarsContent.indexOf('</strength>'))) || 10,
-    intelligence: parseInt(pVarsContent.substring(pVarsContent.indexOf('<intelligence>') + 14, pVarsContent.indexOf('</intelligence>'))) || 10,
-    hp: parseInt(pVarsContent.substring(pVarsContent.indexOf('<hp>') + 4, pVarsContent.indexOf('</hp>'))) || 100,
-    money: parseInt(pVarsContent.substring(pVarsContent.indexOf('<money>') + 7, pVarsContent.indexOf('</money>'))) || 100,
+    day: parseInt(statsMessage.substring(statsMessage.indexOf('Day:') + 5, statsMessage.indexOf('| HP')).trim()) || 0,
+    hp: parseInt(statsMessage.substring(statsMessage.indexOf('HP:') + 3, statsMessage.indexOf('| Money')).trim()) || 100,
+    money: parseInt(statsMessage.substring(statsMessage.indexOf('Money:') + 6, statsMessage.indexOf('| Strength')).trim()) || 100,
+    strength: parseInt(statsMessage.substring(statsMessage.indexOf('Strength:') + 10, statsMessage.indexOf('| Intelligence')).trim()) || 10,
+    intelligence: parseInt(statsMessage.substring(statsMessage.indexOf('Intelligence:') + 14, statsMessage.length).trim()) || 10,
   }
 
   console.log("pVarsContent:",pVarsContent);
@@ -262,16 +250,6 @@ Let's play.
                 messageContent = messageContent.substring(warningEnd + 12, messageContent.length);
               }
             }
-
-            /* Hides the player variables inside the message, but makes it feel laggy on slower models. */
-            // const playerVariablesStart: number = message.content.indexOf('<v');
-            // const playerVariablesEnd: number = message.content.indexOf('</variables>');
-
-            // if (playerVariablesStart > -1 && playerVariablesEnd === -1) {
-            //   messageContent = messageContent.substring(0, playerVariablesStart - 1);
-            // } else if (playerVariablesStart > -1 && playerVariablesEnd > -1) {
-            //   messageContent = messageContent.substring(0, playerVariablesStart - 1) + messageContent.substring(playerVariablesEnd + 13, messageContent.length);
-            // }
 
             return (
               <div key={index} className={`mb-2 ${message.role === 'user' ? 'text-right' : ''}`}>
