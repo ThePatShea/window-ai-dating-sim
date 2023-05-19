@@ -9,11 +9,13 @@ interface Message {
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState<string>('Start Game');
+  const [inputValue, setInputValue] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [windowInstalled, setWindowInstalled] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
+
+  const activeMessages: Message[] = messages.filter(message => message.content !== 'Start Game');
 
   useEffect(() => {
     const waitForAI = async () => {
@@ -55,9 +57,12 @@ const App: React.FC = () => {
 
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!inputValue) return;
 
-    const newMessage: Message = { role: 'user', content: inputValue };
+    const messageInputValue: string = activeMessages.length === 0 ? 'Start Game' : inputValue;
+
+    if (!messageInputValue) return;
+
+    const newMessage: Message = { role: 'user', content: messageInputValue };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setInputValue('');
 
@@ -182,8 +187,6 @@ Let's play.
     scrollToBottom();
   }, [messages]);
 
-  const activeMessages: Message[] = messages.slice(1);
-
   const latestPlayerVariablesMessage: Message | undefined = activeMessages.slice().reverse().find((message) => message.content.indexOf('[Stats]') > -1);
 
   const pVarsContent: string = latestPlayerVariablesMessage?.content || '';
@@ -227,7 +230,7 @@ Let's play.
           </div>
         </div>
         <div className="overflow-y-auto h-96 mb-4">
-          {messages.length === 0 && (
+          {activeMessages.length === 0 && (
             <div className={`p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold bg-violet-200 text-black`}>
               <div className='mb-4'>Welcome to DateCity!</div>
               <div className='mb-4'>In this dating sim, you have 10 days to take a woman home with you.</div>
@@ -265,7 +268,7 @@ Let's play.
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className={`flex-grow border-2 border-black bg-sky-200 focus:bg-sky-300 rounded-lg p-2 focus:outline-none text-lg font-semibold ${messages.length === 0 && 'hidden'}`}
+            className={`flex-grow border-2 border-black bg-sky-200 focus:bg-sky-300 rounded-lg p-2 focus:outline-none text-lg font-semibold ${activeMessages.length === 0 && 'hidden'}`}
           />
 
           {
@@ -273,9 +276,9 @@ Let's play.
               <button
                 type="submit"
                 disabled={loading}
-                className={`${messages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
+                className={`${activeMessages.length > 0 ? 'ml-2' : 'mx-auto'} border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold ${loading ? 'opacity-50' : ''}`}
               >
-                {loading ? 'Sending...' : messages.length === 0 ? 'Start Game' : 'Send'}
+                {loading ? 'Sending...' : activeMessages.length === 0 ? 'Start Game' : 'Send'}
               </button>
             )
           }
