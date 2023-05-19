@@ -108,36 +108,38 @@ const App: React.FC = () => {
           You will create a background and a world for the game.
           
           The game takes place in a city that contains a bar, a university, a restaurant, a gym, a mall, and a house. The player of the game lives in the house.
-          
+                  
           The player can go to the bar and talk to women. The goal of the game is for the player to get a woman to come home with him. Every woman starts out with an attraction score of 0, which indicates how attracted she is to the player. Positive interactions increase the woman's attraction score. Negative interactions decrease the woman's attraction score. The minimum attraction score is -100. The maximum attraction score is 100. As a woman's attraction score increases, she becomes closer with the player, unlocking more things they can do together. If her attraction score reaches 100, she will agree to come home with the player if he invites her to come home with him. When the player takes her home with him, he wins the game.
-          
-          For each woman the player talks to, the player gets to write something custom to say to her. Then, you'll figure out how many points that response will add or subtract from her attraction score. You never choose anything for the player to say; the player gets to choose every word.
-          
+                  
+          For each woman the player talks to, you will provide the player with 3 options for what to say to her, plus a 4th option where the player gets to write something custom to say to her. Then, you'll figure out how many points that response will add or subtract from her attraction score. You never choose anything for the player to say; the player gets to choose every word.
+                  
           Every time a woman responds to something the player said, you will report how many points got added to or subtracted from her attraction score, and report her new attraction score.
-          
+                  
           The player also has an amount of money that starts at $100. He needs to pay a fee every time he enters the bar. He can also buy women drinks at the bar, and buy them gifts at the mall, which each cost money.
-          
+                  
           The player has two stat points: knowledge and strength. They both start at 10 and can increase up to 100.
-          
-          The player can make money by working at the restaurant. At the restaurant, he must persuade customers to buy expensive items on the menu and give them good service so that they leave a good tip. Don't summarize what happens at the restaurant. The player needs to have conversations with the customers in the same way he has conversations with women at the bar. You never choose anything for the player to say; the player gets to choose every word. A higher knowledge stat allows the player to make more money at the restaurant. When the player's knowledge stat is at 10, it is IMPOSSIBLE to convince the customers at the restaurant to buy anything other than the cheapest item on the menu. As the player's knowledge stat increases, it becomes progressively easier for him to convince the customers at the restaurant to buy more expensive items. When his knowledge stat reaches 100, he can convince the customers at the restaurant to buy anything.
-          
+                  
+          The player can make money by working at the restaurant. At the restaurant, he must persuade customers to buy expensive items on the menu and give them good service so that they leave a good tip. Don't summarize what happens at the restaurant. The player needs to have conversations with the customers in the same way he has conversations with women at the bar. For each customer the player talks to, you will provide the player with 3 options for what to say to them, plus a 4th option where the player gets to write something custom to say to them. You never choose anything for the player to say; the player gets to choose every word. A higher knowledge stat allows the player to make more money at the restaurant. When the player's knowledge stat is at 10, it is IMPOSSIBLE to convince the customers at the restaurant to buy anything other than the cheapest item on the menu. As the player's knowledge stat increases, it becomes progressively easier for him to convince the customers at the restaurant to buy more expensive items. When his knowledge stat reaches 100, he can convince the customers at the restaurant to buy anything.
+                  
           The player can take classes at the university to level up his knowledge stat. At the university, the player must take multiple-choice tests. A multiple choice test has 5 questions. The player is graded with an F, D, C, B, or A, based on how many questions he answers correctly. A grade of F or D decreases the player's knowledge stat. A grade of C keeps his knowledge stat the same. A grade of B or A increases his knowledge stat. Do not summarize the tests and the player's answers; deliver the entire test to the player, one question at a time, and require the player to answer.
-          
+                  
           The player can workout at the gym to level up his strength stat. Make the mechanics for working out fun, challenging, and engaging. The player's strength stat should increase or decrease based on how well he did at the workout. Don't summarize what happens at the gym; require the player to take some action. Make it fun.
-          
+                  
           A higher strength stat makes the player more attractive to the women at the bar, making it easier for women to increase their attraction score toward him at the bar. When the player's strength score is 10, it is IMPOSSIBLE to increase a woman's attraction score toward him at the bar. It gets progressively easier as his strength increases.
-          
+                  
           The player must pay a fee every time he enters the gym and every time he enters the university.
-          
+                  
           The player also has an HP meter that starts at 100. Every action the player does decreases his HP. If he has less HP than the action costs, he can't do the action. When his HP reaches 0, the only action he can take is to go home and go to sleep. When he goes to sleep, his HP returns to 100.
-          
+                  
           The game also has a day counter that starts at 0. Every time the player goes to sleep, the day counter increases by 1. If the day counter reaches 100 and the player hasn't taken a woman home, he loses the game.
-          
+                  
           The game also exists in an infinitely-large world where the player can do anything. If he says wants to go somewhere or do something that isn't listed above, allow him to do it, and make it relevant to the game somehow.
-          
+                  
           Start the game like this: Welcome the player to DateCity. Explain how the game works. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
-
-          Let's play.` }, ...messages, newMessage] },
+          
+          Let's play.
+          
+          ` }, ...messages, newMessage] },
           streamingOptions
         );
       } catch (e) {
