@@ -154,10 +154,21 @@ First, show the following warning, exactly like this:
 <warning>This game is extremely challenging and difficult. The women in this game are all horrible people who will be extremely rude and awful toward you.</warning>
 
 Then, welcome the player to DateCity. Explain how the game works. Do not mention that this game is challenging and difficult. Do not mention that the people in this game are all horrible. Just act like everything is totally normal. Next, tell the player his current stats, his current HP, his current money and the current day. Then, tell him his options for where he can go. After that, ask him where he wants to go first.
+At the end of everything you say, you will report all of the player’s variables. For example, if it is day 3 and the player has a strength stat of 25, an intelligence stat of 15, he has 20 HP, and he has $235, you’ll write this:
+
+<variables>
+    <day>3</day>
+    <strength>25</strength>
+    <intelligence>15</intelligence>
+    <hp>15</hp>
+    <money>235</money>
+</variables>
+
+Never call the “intelligence” variable by the name “knowledge”. It is always “intelligence”.
 
 Let's play.
 
-                      
+          
           ` }, ...messages, newMessage] },
           streamingOptions
         );
@@ -177,13 +188,57 @@ Let's play.
     scrollToBottom();
   }, [messages]);
 
-  let activeMessages: Message[] = messages.slice(1);
+  const activeMessages: Message[] = messages.slice(1);
+
+  const latestPlayerVariablesMessage: Message | undefined = activeMessages.slice().reverse().find((message) => {
+    const playerVariablesStart: number = message.content.indexOf('<variables>');
+    const playerVariablesEnd: number = message.content.indexOf('</variables>');
+
+    if (playerVariablesStart > -1 && playerVariablesEnd > -1) {
+      return true;
+    }
+  });
+
+  const pVarsContent: string = latestPlayerVariablesMessage?.content || '';
+
+  const playerVariables = {
+    day: parseInt(pVarsContent.substring(pVarsContent.indexOf('<day>') + 5, pVarsContent.indexOf('</day>'))) || 0,
+    strength: parseInt(pVarsContent.substring(pVarsContent.indexOf('<strength>') + 10, pVarsContent.indexOf('</strength>'))) || 10,
+    intelligence: parseInt(pVarsContent.substring(pVarsContent.indexOf('<intelligence>') + 14, pVarsContent.indexOf('</intelligence>'))) || 10,
+    hp: parseInt(pVarsContent.substring(pVarsContent.indexOf('<hp>') + 4, pVarsContent.indexOf('</hp>'))) || 100,
+    money: parseInt(pVarsContent.substring(pVarsContent.indexOf('<money>') + 7, pVarsContent.indexOf('</money>'))) || 100,
+  }
+
+  console.log("pVarsContent:",pVarsContent);
+  console.log("playerVariables:",playerVariables);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
       <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black">
         <h1 className="text-3xl font-bold mb-4 text-center">DateCity: A Window.AI Experience</h1>
+        <div className="flex text-center mb-2 rounded-lg border-2 border-black py-1 bg-rose-300">
+          <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-purple-300">
+            <span className='font-bold'>Day: </span>
+            <span className='font-semibold'>{playerVariables.day}/10</span>
+          </div>
+          <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-cyan-300">
+            <span className='font-bold'>HP: </span>
+            <span className='font-semibold'>{playerVariables.hp}/100</span>
+          </div>
+          <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-green-300">
+            <span className='font-bold'>Money: </span>
+            <span className='font-semibold'>${playerVariables.money}</span>
+          </div>
+          <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-orange-300">
+            <span className='font-bold'>Strength: </span>
+            <span className='font-semibold'>{playerVariables.strength}</span>
+          </div>
+          <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-teal-300">
+            <span className='font-bold'>Intelligence: </span>
+            <span className='font-semibold'>{playerVariables.intelligence}</span>
+          </div>
+        </div>
         <div className="overflow-y-auto h-96 mb-4">
           {messages.length === 0 && (
             <div className={`p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold bg-violet-200 text-black`}>
@@ -207,6 +262,16 @@ Let's play.
                 messageContent = messageContent.substring(warningEnd + 12, messageContent.length);
               }
             }
+
+            /* Hides the player variables inside the message, but makes it feel laggy on slower models. */
+            // const playerVariablesStart: number = message.content.indexOf('<v');
+            // const playerVariablesEnd: number = message.content.indexOf('</variables>');
+
+            // if (playerVariablesStart > -1 && playerVariablesEnd === -1) {
+            //   messageContent = messageContent.substring(0, playerVariablesStart - 1);
+            // } else if (playerVariablesStart > -1 && playerVariablesEnd > -1) {
+            //   messageContent = messageContent.substring(0, playerVariablesStart - 1) + messageContent.substring(playerVariablesEnd + 13, messageContent.length);
+            // }
 
             return (
               <div key={index} className={`mb-2 ${message.role === 'user' ? 'text-right' : ''}`}>
