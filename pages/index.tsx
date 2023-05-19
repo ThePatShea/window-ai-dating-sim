@@ -69,6 +69,12 @@ const App: React.FC = () => {
     waitForAI();
   }, []);
 
+  const resetGame = async () => {
+    setInputValue('');
+    setMessages([]);
+    window.localStorage.setItem("dateCityMessages", JSON.stringify([]));
+  };
+
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -219,8 +225,14 @@ Let's play.
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
-      <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black">
-        <h1 className="text-3xl font-bold mb-4 text-center">DateCity: A Window.AI Experience</h1>
+      <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative">
+        <h1 className="text-3xl font-bold mb-4 text-center py-1">DateCity: A Window.AI Experience</h1>
+        <button
+          className={`absolute top-1 right-1 border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-1 rounded-lg text-md font-semibold`}
+          onClick={resetGame}
+        >
+          New Game
+        </button>
         <div className="flex text-center mb-2 rounded-lg border-2 border-black py-1 bg-rose-300">
           <div className="flex-auto border-2 rounded-lg border-black mx-1 bg-purple-300">
             <span className='font-bold'>Day: </span>
