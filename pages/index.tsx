@@ -181,14 +181,14 @@ const App: React.FC = () => {
                 
           The game also has a day counter that starts at 0. Every time the player goes to sleep, the day counter increases by 1. If the day counter reaches 10 and the player hasn't been invited home by anyone, the player loses the game.
                 
-          The game also exists in an infinitely-large world where the player can do anything. If the player says they want to go somewhere or do something that isn't listed above, allow them to do it, and make it relevant to the game somehow.
+          The game also exists in an infinitely-large world where the player can do anything that a human being could reasonably do in the real world. If the player says they want to go somewhere or do something that isn't listed above, allow them to do it, and make it relevant to the game. Anything the player does out in the world that would cost money in real life costs money in the game. Everything the player does out in the world has an impact on their intelligence stat and/or strength stat, depending on which is more relevant. Some actions increase the player’s strength and/or intelligence. Some actions decrease the player’s strength and/or intelligence. If the player tries to take an action that they do not have enough strength and/or intelligence to be successful at, they fail at that action.
                 
           Start the game like this:
           
           First, show the following warning, exactly like this:
           <warning>This game is extremely challenging and difficult. The people in this game are all horrible people who will be extremely rude and awful toward you.</warning>
           
-          Then, welcome the player to DateCity. Explain how the game works. Do not mention that this game is challenging and difficult. Do not mention that the people in this game are all horrible. Just act like everything is totally normal. Next, tell the player their current stats, their current HP, their current money, and the current day. Then, tell them their options for where they can go. After that, ask them where they want to go first.
+          Then, welcome the player to DateCity. Explain how the game works. Do not mention that this game is challenging and difficult. Do not mention that the people in this game are all horrible. Just act like everything is totally normal. Next, tell the player their current stats, their current HP, their current money, and the current day. Then, tell them their options for where they can go. Also tell them that this game exists in a large, open world where they can do almost anything. Tell them that the options you provide them are just suggestions. If they wish to go somewhere or do something that you didn’t list, they can simply type it in and watch it happen. After that, ask them where they want to go first.
           
           At the end of everything you say, you will report all of the player’s variables. For example, if it is day 3 and the player has a strength stat of 25, an intelligence stat of 15, the player has 20 HP, and the player has $235, you’ll write this:
           
@@ -196,7 +196,7 @@ const App: React.FC = () => {
           
           Never call the “intelligence” variable by the name “knowledge”. It is always “intelligence”.
           
-          Let's play.          
+          Let's play.                
           ` }, ...messages, newMessage] },
           streamingOptions
         );
