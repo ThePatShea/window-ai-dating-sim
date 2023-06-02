@@ -1,4 +1,4 @@
-# Dating Sim x window.ai
+# DateCity: A Window.AI Experience
 
 This is a dating sim game built on [window.ai](windowai.io).
 
