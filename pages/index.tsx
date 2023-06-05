@@ -1,8 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import toast, { Toaster } from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
+
+async function logConversation(messages: Message[]) {
+  const { data, error } = await supabase
+    .from('game_sessions')
+    .insert([
+      { session_id: uuidv4(), conversation: JSON.stringify(messages) },
+    ])
+
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(data);
+  }
+}
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -22,6 +43,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (messages.length > 0) {
       window.localStorage.setItem("dateCityMessages", JSON.stringify(messages));
+      logConversation(messages);
     }
   }, [messages]);
 
