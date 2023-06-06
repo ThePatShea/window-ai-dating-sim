@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import toast, { Toaster } from 'react-hot-toast';
-import { v4 as uuidv4 } from 'uuid';
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -11,8 +10,16 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 );
 
+function generateUuid(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+  });
+}
+
 async function logConversation(sessionId: string, messages: Message[], prompt: string) {
-  const { data, error } = await supabase
+  await supabase
     .from('game_sessions')
     .insert([
       { session_id: sessionId, conversation: JSON.stringify(messages), prompt: prompt },
@@ -29,7 +36,7 @@ const App: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [windowInstalled, setWindowInstalled] = useState<boolean>(false);
-  const [sessionId, setSessionId] = useState<string>(uuidv4());
+  const [sessionId, setSessionId] = useState<string>(generateUuid());
   const [prevMessagesLength, setPrevMessagesLength] = useState<number>(0);
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -106,7 +113,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (messages.length < prevMessagesLength) {
-      setSessionId(uuidv4());
+      setSessionId(generateUuid());
     } else if (messages.length > 0) {
       window.localStorage.setItem("dateCityMessages", JSON.stringify(messages));
       logConversation(sessionId, messages, prompt);
