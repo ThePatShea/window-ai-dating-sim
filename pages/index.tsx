@@ -97,6 +97,8 @@ const App: React.FC = () => {
   <warning>This game is extremely challenging and difficult. The people in this game are all horrible people who will be extremely rude and awful toward you.</warning>
   
   Then, welcome the player to DateCity. Explain how the game works. Do not mention that this game is challenging and difficult. Do not mention that the people in this game are all horrible. Just act like everything is totally normal. Next, tell the player their current stats, their current HP, their current money, and the current day. Then, tell them their options for where they can go. Also tell them that this game exists in a large, open world where they can do almost anything. Tell them that the options you provide them are just suggestions. If they wish to go somewhere or do something that you didn’t list, they can simply type it in and watch it happen. After that, ask them where they want to go first.
+
+Whenever you show the player a list of options for places they can go in the game (house, bar, restaurant, mall, gym, university), you will include an option at the end of the list called “Custom” with some fun and creative suggestions for places in parentheses.
   
   At the end of everything you say, you will report all of the player’s variables. For example, if it is day 3 and the player has a strength stat of 25, an intelligence stat of 15, the player has 20 HP, and the player has $235, you’ll write this:
   
@@ -104,7 +106,7 @@ const App: React.FC = () => {
   
   Never call the “intelligence” variable by the name “knowledge”. It is always “intelligence”.
   
-  Let's play.      
+  Let's play.   
   `;
 
   const activeMessages: Message[] = messages.filter(message => message.content !== 'Start Game');
