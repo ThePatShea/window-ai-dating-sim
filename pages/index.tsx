@@ -19,8 +19,6 @@ function generateUuid(): string {
 }
 
 async function logConversation(sessionId: string, role: string, message: string, systemPrompt: string) {
-  console.log('logConversation', sessionId, role, message, systemPrompt)
-
   await supabase
     .from('user_sessions')
     .insert([
@@ -194,7 +192,6 @@ Whenever you show the player a list of options for places they can go in the gam
 
     const messageInputValue: string = activeMessages.length === 0 ? 'Start Game' : inputValue;
     
-    console.log('messageInputValue', messageInputValue)
     logConversation(sessionId, 'user', messageInputValue, prompt);
 
     if (!messageInputValue) return;
@@ -252,10 +249,6 @@ Whenever you show the player a list of options for places they can go in the gam
         );
 
         logConversation(sessionId, 'assistant', additionalMessage.message.content, prompt);
-
-        
-        console.log('additionalMessage.message.content:');
-        console.log(additionalMessage.message.content);
       } catch (e) {
         setLoading(false);
         //comment this if not using window.ai onStreamResult - otherwise redudant
