@@ -18,7 +18,7 @@ function generateUuid(): string {
   });
 }
 
-async function logConversation(sessionId: string, role: string, message: string, systemPrompt: string) {
+async function logConversation(sessionId: string, role: string, message: string, systemPrompt: string, model: string) {
   await supabase
     .from('user_sessions')
     .insert([
@@ -26,7 +26,8 @@ async function logConversation(sessionId: string, role: string, message: string,
         session_id: sessionId, 
         role: role, 
         message: message, 
-        system_prompt: systemPrompt 
+        system_prompt: systemPrompt,
+        model: model
       },
     ])
 }
@@ -43,6 +44,7 @@ const App: React.FC = () => {
   const [windowInstalled, setWindowInstalled] = useState<boolean>(false);
   const [sessionId, setSessionId] = useState<string>(generateUuid());
   const [prevMessagesLength, setPrevMessagesLength] = useState<number>(0);
+  const [currentModel, setCurrentModel] = useState<string>('');
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
@@ -192,7 +194,7 @@ Whenever you show the player a list of options for places they can go in the gam
 
     const messageInputValue: string = activeMessages.length === 0 ? 'Start Game' : inputValue;
     
-    logConversation(sessionId, 'user', messageInputValue, prompt);
+    logConversation(sessionId, 'user', messageInputValue, prompt, currentModel);
 
     if (!messageInputValue) return;
 
@@ -240,7 +242,7 @@ Whenever you show the player a list of options for places they can go in the gam
         }
       },
     };
-
+    
     if (aiRef.current) {
       try {
         const additionalMessage = await aiRef.current.getCompletion(
@@ -248,7 +250,10 @@ Whenever you show the player a list of options for places they can go in the gam
           streamingOptions
         );
 
-        logConversation(sessionId, 'assistant', additionalMessage.message.content, prompt);
+        const newCurrentModel: string = await aiRef.current.getCurrentModel();
+        setCurrentModel(newCurrentModel);
+
+        logConversation(sessionId, 'assistant', additionalMessage.message.content, prompt, newCurrentModel);
       } catch (e) {
         setLoading(false);
         //comment this if not using window.ai onStreamResult - otherwise redudant
