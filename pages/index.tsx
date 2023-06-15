@@ -18,11 +18,18 @@ function generateUuid(): string {
   });
 }
 
-async function logConversation(sessionId: string, messages: Message[], prompt: string) {
+async function logConversation(sessionId: string, role: string, message: string, systemPrompt: string) {
+  console.log('logConversation', sessionId, role, message, systemPrompt)
+
   await supabase
-    .from('game_sessions')
+    .from('user_sessions')
     .insert([
-      { session_id: sessionId, conversation: JSON.stringify(messages), prompt: prompt },
+      { 
+        session_id: sessionId, 
+        role: role, 
+        message: message, 
+        system_prompt: systemPrompt 
+      },
     ])
 }
 
@@ -113,10 +120,12 @@ Whenever you show the player a list of options for places they can go in the gam
 
   useEffect(() => {
     if (messages.length < prevMessagesLength) {
-      setSessionId(generateUuid());
+      const newSessionId: string = generateUuid();
+
+      window.localStorage.setItem("dateCitySessionId", newSessionId);
+      setSessionId(newSessionId);
     } else if (messages.length > 0) {
       window.localStorage.setItem("dateCityMessages", JSON.stringify(messages));
-      logConversation(sessionId, messages, prompt);
     }
 
     setPrevMessagesLength(messages.length);
@@ -126,8 +135,14 @@ Whenever you show the player a list of options for places they can go in the gam
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
     const savedMessages: Message[] = savedMessagesString ? JSON.parse(savedMessagesString) : '';
 
+    const savedSessionId: string | null = window.localStorage.getItem("dateCitySessionId");
+
     if (savedMessages) {
       setMessages(savedMessages);
+    }
+
+    if (savedSessionId) {
+      setSessionId(savedSessionId);
     }
 
     const waitForAI = async () => {
@@ -178,6 +193,9 @@ Whenever you show the player a list of options for places they can go in the gam
     event.preventDefault();
 
     const messageInputValue: string = activeMessages.length === 0 ? 'Start Game' : inputValue;
+    
+    console.log('messageInputValue', messageInputValue)
+    logConversation(sessionId, 'user', messageInputValue, prompt);
 
     if (!messageInputValue) return;
 
@@ -228,10 +246,16 @@ Whenever you show the player a list of options for places they can go in the gam
 
     if (aiRef.current) {
       try {
-        await aiRef.current.getCompletion(
+        const additionalMessage = await aiRef.current.getCompletion(
           { messages: [{ role: 'system', content: prompt }, ...messages, newMessage] },
           streamingOptions
         );
+
+        logConversation(sessionId, 'assistant', additionalMessage.message.content, prompt);
+
+        
+        console.log('additionalMessage.message.content:');
+        console.log(additionalMessage.message.content);
       } catch (e) {
         setLoading(false);
         //comment this if not using window.ai onStreamResult - otherwise redudant
