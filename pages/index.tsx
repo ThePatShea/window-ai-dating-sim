@@ -137,11 +137,11 @@ const App: React.FC = () => {
   
   Never call the “intelligence” variable by the name “knowledge”. It is always “intelligence”.
 
-  Whenever the player spends money or makes money, you'll write this: [$]
-  Whenever an attraction score increases, you'll write this: [+]
-  Whenever an attraction score decreases, you'll write this: [-]
+  Whenever the player spends money or makes money, you'll write this (DON’T FORGET TO WRITE THIS): [$]
+  Whenever an attraction score increases, you'll write this (DON’T FORGET TO WRITE THIS): [+]
+  Whenever an attraction score decreases, you'll write this (DON’T FORGET TO WRITE THIS): [-]
   
-  Let's play. 
+  Let's play.
   `;
 
   const activeMessages: Message[] = messages.filter(message => message.content !== 'Start Game');
@@ -255,6 +255,18 @@ const App: React.FC = () => {
               },
             ];
           } else {
+            if (result.message.content.indexOf('[+') > -1 || result.message.content.indexOf('+]') > -1) {
+              playSound('success');
+            } 
+        
+            if (result.message.content.indexOf('[-') > -1 || result.message.content.indexOf('-]') > -1) {
+              playSound('failure');
+            }
+        
+            if (result.message.content.indexOf('[$') > -1 || result.message.content.indexOf('$]') > -1) {
+              playSound('money');
+            }
+
             updatedMessages = updatedMessages.map((message, index) => {
               if (index === updatedMessages.length - 1) {
                 return {
@@ -313,21 +325,6 @@ const App: React.FC = () => {
     intelligence: parseInt(statsMessage.substring(statsMessage.indexOf('Intelligence:') + 14, statsMessage.length).trim()) || 10,
   }
 
-  const latestMessage: Message | undefined = activeMessages.slice().reverse().find((message) => message.role === 'assistant');
-  const latestMessageContent: string = latestMessage?.content || '';
-
-  if (latestMessageContent.indexOf('[+]') > -1) {
-    playSound('success');
-  } 
-
-  if (latestMessageContent.indexOf('[-]') > -1) {
-    playSound('failure');
-  }
-
-  if (latestMessageContent.indexOf('[$]') > -1) {
-    playSound('money');
-  }
-
   return (
     <>
       <Head>
@@ -336,11 +333,8 @@ const App: React.FC = () => {
         <meta property="og:image" content="https://window-ai-dating-sim.vercel.app/datecity-icon.png" />
       </Head>
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Image src="/datecity-bg-2.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
+        <Image src="/datecity-bg-2.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-md"/>
         <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative overflow-hidden">
-          <button onClick={() => playSound('success')}>Success</button>
-          <button onClick={() => playSound('failure')}>Failure</button>
-          <button onClick={() => playSound('money')}>Money</button>
           <audio className="hidden" ref={successRef} controls>
             <source src={'/sounds/success.wav'} type="audio/wav" />
           </audio>
