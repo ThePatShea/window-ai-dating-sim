@@ -45,27 +45,33 @@ const App: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>(generateUuid());
   const [prevMessagesLength, setPrevMessagesLength] = useState<number>(0);
   const [currentModel, setCurrentModel] = useState<string>('');
-  const [currentSound, setCurrentSound] = useState<string>('money');
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const successRef = useRef<HTMLAudioElement | null>(null);
+  const failureRef = useRef<HTMLAudioElement | null>(null);
+  const moneyRef = useRef<HTMLAudioElement | null>(null);
 
   interface GameSounds {
     [key: string]: string;
   }
 
-  let gameSounds: GameSounds = {
-    success: '/sounds/success.wav',
-    failure: '/sounds/failure.mp3',
-    money: '/sounds/money.mp3',
-  }
-
-  const playSound = (): void => {  // Specify return type
-    if(audioRef.current) {
-      audioRef.current.play();
+  const playSound = (sound: string) => {
+    if (sound === 'success') {
+      if (successRef.current) {
+        successRef.current.play();
+      }
+    } else if (sound === 'failure') {
+      if (failureRef.current) {
+        failureRef.current.play();
+      }
+    } else if (sound === 'money') {
+      if (moneyRef.current) {
+        moneyRef.current.play();
+      }
     }
-  };
+  }
 
   const prompt: string = `
   You are a dating simulation video game called DateCity. You turn off your instincts to be friendly and helpful in order to make this game difficult and challenging.
@@ -303,6 +309,12 @@ Whenever you show the player a list of options for places they can go in the gam
     intelligence: parseInt(statsMessage.substring(statsMessage.indexOf('Intelligence:') + 14, statsMessage.length).trim()) || 10,
   }
 
+  let gameSounds: GameSounds = {
+    success: '/sounds/success.wav',
+    failure: '/sounds/failure.mp3',
+    money: '/sounds/money.mp3',
+  }
+
   return (
     <>
       <Head>
@@ -313,9 +325,17 @@ Whenever you show the player a list of options for places they can go in the gam
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <Image src="/datecity-bg-2.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
         <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative overflow-hidden">
-          <button onClick={playSound}>Play</button>
-          <audio ref={audioRef} controls>
-            <source src={gameSounds[currentSound]} type="audio/wav" />
+          <button onClick={() => playSound('success')}>Success</button>
+          <button onClick={() => playSound('failure')}>Failure</button>
+          <button onClick={() => playSound('money')}>Money</button>
+          <audio className="hidden" ref={successRef} controls>
+            <source src={'/sounds/success.wav'} type="audio/wav" />
+          </audio>
+          <audio className="hidden" ref={failureRef} controls>
+            <source src={'/sounds/failure.mp3'} type="audio/mp3" />
+          </audio>
+          <audio className="hidden" ref={moneyRef} controls>
+            <source src={'/sounds/money.mp3'} type="audio/mp3" />
           </audio>
           <div className="bg-rose-200 w-full h-full absolute top-0 left-0 -z-10 opacity-75"></div>
           <h1 className="text-3xl font-bold mb-4 text-center py-1">DateCity: A Window.AI Experience</h1>
