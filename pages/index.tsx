@@ -293,8 +293,9 @@ Whenever you show the player a list of options for places they can go in the gam
         <meta property="og:image" content="https://window-ai-dating-sim.vercel.app/datecity-icon.png" />
       </Head>
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Image src="/datecity-bg.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
-        <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 bg-rose-200 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative">
+        <Image src="/datecity-bg-2.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
+        <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative overflow-hidden">
+          <div className="bg-rose-200 w-full h-full absolute top-0 left-0 -z-10 opacity-75"></div>
           <h1 className="text-3xl font-bold mb-4 text-center py-1">DateCity: A Window.AI Experience</h1>
           <button
             className={`absolute top-1 right-1 border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-1 rounded-lg text-md font-semibold`}
@@ -327,11 +328,11 @@ Whenever you show the player a list of options for places they can go in the gam
           <div className="overflow-y-auto h-96 mb-4">
             {activeMessages.length === 0 && (
               <div className={`p-2 rounded-lg text-left whitespace-pre-wrap border-2 border-black text-lg font-semibold bg-violet-200 text-black`}>
-                <div className='mb-4'>Welcome to DateCity!</div>
-                <div className='mb-4'>In this dating sim, you have 10 days to get invited home by someone you are attracted to.</div>
-                <div className='mb-4'>In this world, you can go to school, work out at the gym, get a job, shop at the mall, and go to the bar to talk to people.</div>
-                <div className='mb-4'>You will need to level up your stats and earn money to become an attractive person who others want to be with.</div>
-                <div className='mb-4'>DateCity is an infinite world where you can do almost anything. Everything you do will impact your progress toward your goal of getting invited home. If you wish to do something not listed here, simply type it in and watch it happen!</div>
+                <div className='mb-3'>Welcome to DateCity!</div>
+                <div className='mb-3'>In this dating sim, you have 10 days to get invited home by someone you are attracted to.</div>
+                <div className='mb-3'>In this world, you can go to school, work out at the gym, get a job, shop at the mall, and go to the bar to talk to people.</div>
+                <div className='mb-3'>You will need to level up your stats and earn money to become an attractive person who others want to be with.</div>
+                <div>DateCity is an infinite world where you can do almost anything. Everything you do will impact your progress toward your goal of getting invited home. If you wish to do something not listed here, simply type it in and watch it happen!</div>
               </div>
             )}
             {activeMessages.map((message, index) => {
