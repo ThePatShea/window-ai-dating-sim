@@ -45,6 +45,7 @@ const App: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>(generateUuid());
   const [prevMessagesLength, setPrevMessagesLength] = useState<number>(0);
   const [currentModel, setCurrentModel] = useState<string>('');
+  const [callbackUrl, setCallbackUrl] = useState<string>('');
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
@@ -160,6 +161,8 @@ const App: React.FC = () => {
   }, [messages, sessionId, prevMessagesLength, prompt]);
 
   useEffect(() => {
+    setCallbackUrl(window.location.href);
+
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
     const savedMessages: Message[] = savedMessagesString ? JSON.parse(savedMessagesString) : '';
 
@@ -431,21 +434,36 @@ const App: React.FC = () => {
 
           {
             !windowInstalled && (
-              <div className="flex justify-center">
-                <Link
-                  href="https://windowai.io"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline font-semibold"
-                >
-                  <button
-                    className={`border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold`}
+              <>
+                <div className="justify-center hidden md:flex">
+                  <Link
+                    href="https://windowai.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-semibold"
                   >
-                    Install Window.AI
-                  </button>
-                </Link>
-              </div>
-            
+                    <button
+                      className={`border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold`}
+                    >
+                      Install Window.AI
+                    </button>
+                  </Link>
+                </div>
+                <div className="justify-center flex md:hidden">
+                  <Link
+                    href={`https://openrouter.ai/account?callback_url=${callbackUrl}`}
+                    rel="noopener noreferrer"
+                    className="underline font-semibold"
+                  >
+                    <button
+                      className={`border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-4 py-2 rounded-lg text-lg font-semibold`}
+                    >
+                      Get API Key
+                    </button>
+                  </Link>
+                </div>
+              </>
+              
             )
           }
         </div>
