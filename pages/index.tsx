@@ -46,6 +46,7 @@ const App: React.FC = () => {
   const [prevMessagesLength, setPrevMessagesLength] = useState<number>(0);
   const [currentModel, setCurrentModel] = useState<string>('');
   const [callbackUrl, setCallbackUrl] = useState<string>('');
+  const [openRouterApiKey, setOpenRouterApiKey] = useState<string>('');
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
@@ -162,6 +163,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setCallbackUrl(window.location.href);
+
+    // Placeholder for setting the open router API key for mobile
+    // window.localStorage.setItem("openRouterApiKey", "");
+    const existingOpenRouterApiKey = window.localStorage.getItem("openRouterApiKey");
+    setOpenRouterApiKey(existingOpenRouterApiKey || '');
 
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
     const savedMessages: Message[] = savedMessagesString ? JSON.parse(savedMessagesString) : '';
@@ -302,6 +308,27 @@ const App: React.FC = () => {
         //comment this if not using window.ai onStreamResult - otherwise redudant
         //toast.error('Window.ai completion failed.');
       }
+    } else if (openRouterApiKey) {
+      const url = 'https://openrouter.ai/api/v1/chat/completions';
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openRouterApiKey}`,
+        'HTTP-Referer': callbackUrl,
+      };
+      const body = JSON.stringify({
+        'model': 'openai/gpt-4',
+        'messages': [{ role: 'system', content: prompt }, ...messages, newMessage]
+      });
+      
+      fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: body
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
     }
   };
 
@@ -420,7 +447,7 @@ const App: React.FC = () => {
             />
 
             {
-              windowInstalled && (
+              (windowInstalled || openRouterApiKey) && (
                 <button
                   type="submit"
                   disabled={loading}
@@ -433,7 +460,7 @@ const App: React.FC = () => {
           </form>
 
           {
-            !windowInstalled && (
+            (!windowInstalled && !openRouterApiKey) && (
               <>
                 <div className="justify-center hidden md:flex">
                   <Link
