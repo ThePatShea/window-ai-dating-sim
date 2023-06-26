@@ -363,7 +363,7 @@ const App: React.FC = () => {
         <meta property="og:image" content="https://window-ai-dating-sim.vercel.app/datecity-icon.png" />
       </Head>
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Image src="/datecity-bg-2.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-md"/>
+        <Image src="/datecity-bg-3.jpg" fill={true} alt="DateCity Background" className="fixed z-0 blur-sm"/>
         <div className="w-full sm:w-3/4 lg:w-1/2 xl:w-1/2 shadow-lg rounded-lg p-6 z-10 border-2 border-black relative overflow-hidden">
           <audio className="hidden" ref={successRef} controls>
             <source src={'/sounds/success.wav'} type="audio/wav" />
