@@ -358,7 +358,7 @@ const App: React.FC = () => {
   return (
     <>
       <Head>
-        <title>DateCity: A Window.AI Experience</title>
+        <title>DateCity</title>
         <meta property="og:description" content="A dating sim game built on Window.AI" />
         <meta property="og:image" content="https://window-ai-dating-sim.vercel.app/datecity-icon.png" />
       </Head>
@@ -375,7 +375,7 @@ const App: React.FC = () => {
             <source src={'/sounds/money.mp3'} type="audio/mp3" />
           </audio>
           <div className="bg-rose-200 w-full h-full absolute top-0 left-0 -z-10 opacity-75"></div>
-          <h1 className="text-3xl font-bold mb-4 text-center py-1">DateCity: A Window.AI Experience</h1>
+          <h1 className="text-3xl font-bold mb-4 text-center py-1">DateCity</h1>
           <button
             className={`absolute top-1 right-1 border-2 border-black bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-400 text-black px-1 rounded-lg text-md font-semibold`}
             onClick={resetGame}
