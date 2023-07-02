@@ -225,6 +225,7 @@ const App: React.FC = () => {
     setMessages([]);
     window.localStorage.setItem("dateCityMessages", JSON.stringify([]));
   };
+  
 
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -254,6 +255,7 @@ const App: React.FC = () => {
           setLoading(false);
 
           const lastMessage = updatedMessages[updatedMessages.length - 1];
+
           if (lastMessage.role === 'user') {
             setLoading(false);
             updatedMessages = [
@@ -327,7 +329,46 @@ const App: React.FC = () => {
         body: body
       })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        const result = data.choices[0];
+
+        const lastMessage = updatedMessages[updatedMessages.length - 1];
+
+        if (lastMessage.role === 'user') {
+          setLoading(false);
+          updatedMessages = [
+            ...updatedMessages,
+            {
+              role: 'assistant',
+              content: result.message.content,
+            },
+          ];
+        } else {
+          if (result.message.content.indexOf('[+') > -1 || result.message.content.indexOf('+]') > -1) {
+            playSound('success');
+          } 
+      
+          if (result.message.content.indexOf('[-') > -1 || result.message.content.indexOf('-]') > -1) {
+            playSound('failure');
+          }
+      
+          if (result.message.content.indexOf('[$') > -1 || result.message.content.indexOf('$]') > -1) {
+            playSound('money');
+          }
+
+          updatedMessages = updatedMessages.map((message, index) => {
+            if (index === updatedMessages.length - 1) {
+              return {
+                ...message,
+                content: message.content + result.message.content,
+              };
+            }
+            return message;
+          });
+        }
+
+        setMessages(updatedMessages);
+      })
       .catch(error => console.error('Error:', error));
     }
   };
