@@ -226,6 +226,21 @@ const App: React.FC = () => {
     window.localStorage.setItem("dateCityMessages", JSON.stringify([]));
   };
   
+  const handleSounds = (messageContent: string) => {
+    console.log('messageContent', messageContent);
+
+    if (messageContent.indexOf('[+') > -1 || messageContent.indexOf('+]') > -1) {
+      playSound('success');
+    } 
+
+    if (messageContent.indexOf('[-') > -1 || messageContent.indexOf('-]') > -1) {
+      playSound('failure');
+    }
+
+    if (messageContent.indexOf('[$') > -1 || messageContent.indexOf('$]') > -1) {
+      playSound('money');
+    }
+  }
 
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -257,7 +272,6 @@ const App: React.FC = () => {
           const lastMessage = updatedMessages[updatedMessages.length - 1];
 
           if (lastMessage.role === 'user') {
-            setLoading(false);
             updatedMessages = [
               ...updatedMessages,
               {
@@ -266,17 +280,7 @@ const App: React.FC = () => {
               },
             ];
           } else {
-            if (result.message.content.indexOf('[+') > -1 || result.message.content.indexOf('+]') > -1) {
-              playSound('success');
-            } 
-        
-            if (result.message.content.indexOf('[-') > -1 || result.message.content.indexOf('-]') > -1) {
-              playSound('failure');
-            }
-        
-            if (result.message.content.indexOf('[$') > -1 || result.message.content.indexOf('$]') > -1) {
-              playSound('money');
-            }
+            handleSounds(result.message.content);
 
             updatedMessages = updatedMessages.map((message, index) => {
               if (index === updatedMessages.length - 1) {
@@ -334,38 +338,17 @@ const App: React.FC = () => {
 
         const lastMessage = updatedMessages[updatedMessages.length - 1];
 
-        if (lastMessage.role === 'user') {
-          setLoading(false);
-          updatedMessages = [
-            ...updatedMessages,
-            {
-              role: 'assistant',
-              content: result.message.content,
-            },
-          ];
-        } else {
-          if (result.message.content.indexOf('[+') > -1 || result.message.content.indexOf('+]') > -1) {
-            playSound('success');
-          } 
-      
-          if (result.message.content.indexOf('[-') > -1 || result.message.content.indexOf('-]') > -1) {
-            playSound('failure');
-          }
-      
-          if (result.message.content.indexOf('[$') > -1 || result.message.content.indexOf('$]') > -1) {
-            playSound('money');
-          }
+        setLoading(false);
 
-          updatedMessages = updatedMessages.map((message, index) => {
-            if (index === updatedMessages.length - 1) {
-              return {
-                ...message,
-                content: message.content + result.message.content,
-              };
-            }
-            return message;
-          });
-        }
+        updatedMessages = [
+          ...updatedMessages,
+          {
+            role: 'assistant',
+            content: result.message.content,
+          },
+        ];
+
+        handleSounds(result.message.content);
 
         setMessages(updatedMessages);
       })
