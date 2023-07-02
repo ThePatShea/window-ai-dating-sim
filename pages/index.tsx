@@ -166,8 +166,30 @@ const App: React.FC = () => {
 
     // Placeholder for setting the open router API key for mobile
     // window.localStorage.setItem("openRouterApiKey", "");
-    const existingOpenRouterApiKey = window.localStorage.getItem("openRouterApiKey");
-    setOpenRouterApiKey(existingOpenRouterApiKey || '');
+
+    const existingOpenRouterApiKey = window.localStorage.getItem('openRouterApiKey');
+
+    if (existingOpenRouterApiKey !== 'undefined') {
+      setOpenRouterApiKey(existingOpenRouterApiKey || '');
+    }
+
+    const code = new URLSearchParams(window.location.search).get('code');
+
+    if (code) {
+      fetch("https://openrouter.ai/api/v1/auth/keys", {
+        method: 'POST',
+        body: JSON.stringify({
+          code,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.key) {
+          window.localStorage.setItem("openRouterApiKey", data.key);
+          setOpenRouterApiKey(data.key);
+        }
+       });
+    }
 
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
     const savedMessages: Message[] = savedMessagesString ? JSON.parse(savedMessagesString) : '';
@@ -227,8 +249,6 @@ const App: React.FC = () => {
   };
   
   const handleSounds = (messageContent: string) => {
-    console.log('messageContent', messageContent);
-
     if (messageContent.indexOf('[+') > -1 || messageContent.indexOf('+]') > -1) {
       playSound('success');
     } 
@@ -502,7 +522,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="justify-center flex md:hidden">
                   <Link
-                    href={`https://openrouter.ai/account?callback_url=${callbackUrl}`}
+                    href={`https://openrouter.ai/auth?callback_url=${callbackUrl}`}
                     rel="noopener noreferrer"
                     className="underline font-semibold"
                   >
