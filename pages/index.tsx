@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import toast, { Toaster } from 'react-hot-toast';
+import { Base64 } from 'js-base64';
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -9,6 +10,25 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 );
+
+// Function to generate a random string of a specific length
+function generateRandomString(length: number): string {
+  let array = new Uint8Array(length);
+  window.crypto.getRandomValues(array);
+  return Array.from(array, byte => ('0' + (byte & 0xFF).toString(16)).slice(-2)).join('');
+}
+
+// Function to hash a string using SHA-256
+async function sha256(input: string): Promise<Uint8Array> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  return new Uint8Array(await window.crypto.subtle.digest('SHA-256', data));
+}
+
+// Function to encode a Uint8Array in URL-safe Base64
+function base64URLEncode(input: Uint8Array): string {
+  return Base64.fromUint8Array(input).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
 
 function generateUuid(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -47,6 +67,8 @@ const App: React.FC = () => {
   const [currentModel, setCurrentModel] = useState<string>('');
   const [callbackUrl, setCallbackUrl] = useState<string>('');
   const [openRouterApiKey, setOpenRouterApiKey] = useState<string>('');
+  const [codeVerifier, setCodeVerifier] = useState<string>('');
+  const [codeChallenge, setCodeChallenge] = useState<string>('');
   
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const aiRef = useRef<any>(null);
@@ -189,6 +211,33 @@ const App: React.FC = () => {
           setOpenRouterApiKey(data.key);
         }
        });
+    }
+
+    if (!code && !existingOpenRouterApiKey) {
+      let currentCodeVerifier: string | null = null;
+
+      const existingCodeVerifier = window.localStorage.getItem('codeVerifier');
+
+      console.log('Existing Code Verifier:', existingCodeVerifier);
+
+      if (existingCodeVerifier && existingCodeVerifier !== 'undefined') {
+        setCodeVerifier(existingCodeVerifier || '');
+        currentCodeVerifier = existingCodeVerifier;
+      } else {
+        // Generate a code verifier
+        const newCodeVerifier: string = generateRandomString(256);
+        window.localStorage.setItem('codeVerifier', newCodeVerifier);
+        setCodeVerifier(newCodeVerifier);
+        currentCodeVerifier = newCodeVerifier;
+      }
+
+      // Hash the code verifier and encode the hash in URL-safe Base64 to generate the code challenge
+      sha256(currentCodeVerifier).then(hashedVerifier => {
+        const newCodeChallenge = base64URLEncode(hashedVerifier);
+        setCodeChallenge(newCodeChallenge);
+        console.log('Code Verifier:', currentCodeVerifier);
+        console.log('Code Challenge:', newCodeChallenge);
+      });
     }
 
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
