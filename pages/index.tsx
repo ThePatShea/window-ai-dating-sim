@@ -197,11 +197,37 @@ const App: React.FC = () => {
 
     const code = new URLSearchParams(window.location.search).get('code');
 
+    let currentCodeVerifier: string | null = null;
+
+    const existingCodeVerifier = window.localStorage.getItem('codeVerifier');
+
+    console.log('Existing Code Verifier:', existingCodeVerifier);
+
+    if (existingCodeVerifier && existingCodeVerifier !== 'undefined') {
+      setCodeVerifier(existingCodeVerifier || '');
+      currentCodeVerifier = existingCodeVerifier;
+    } else {
+      // Generate a code verifier
+      const newCodeVerifier: string = generateRandomString(256);
+      window.localStorage.setItem('codeVerifier', newCodeVerifier);
+      setCodeVerifier(newCodeVerifier);
+      currentCodeVerifier = newCodeVerifier;
+    }
+
+    // Hash the code verifier and encode the hash in URL-safe Base64 to generate the code challenge
+    sha256(currentCodeVerifier).then(hashedVerifier => {
+      const newCodeChallenge = base64URLEncode(hashedVerifier);
+      setCodeChallenge(newCodeChallenge);
+      console.log('Code Verifier:', currentCodeVerifier);
+      console.log('Code Challenge:', newCodeChallenge);
+    });
+
     if (code) {
       fetch("https://openrouter.ai/api/v1/auth/keys", {
         method: 'POST',
         body: JSON.stringify({
           code,
+          code_verifier: currentCodeVerifier,
         })
       })
       .then(response => response.json())
@@ -211,33 +237,6 @@ const App: React.FC = () => {
           setOpenRouterApiKey(data.key);
         }
        });
-    }
-
-    if (!code && !existingOpenRouterApiKey) {
-      let currentCodeVerifier: string | null = null;
-
-      const existingCodeVerifier = window.localStorage.getItem('codeVerifier');
-
-      console.log('Existing Code Verifier:', existingCodeVerifier);
-
-      if (existingCodeVerifier && existingCodeVerifier !== 'undefined') {
-        setCodeVerifier(existingCodeVerifier || '');
-        currentCodeVerifier = existingCodeVerifier;
-      } else {
-        // Generate a code verifier
-        const newCodeVerifier: string = generateRandomString(256);
-        window.localStorage.setItem('codeVerifier', newCodeVerifier);
-        setCodeVerifier(newCodeVerifier);
-        currentCodeVerifier = newCodeVerifier;
-      }
-
-      // Hash the code verifier and encode the hash in URL-safe Base64 to generate the code challenge
-      sha256(currentCodeVerifier).then(hashedVerifier => {
-        const newCodeChallenge = base64URLEncode(hashedVerifier);
-        setCodeChallenge(newCodeChallenge);
-        console.log('Code Verifier:', currentCodeVerifier);
-        console.log('Code Challenge:', newCodeChallenge);
-      });
     }
 
     const savedMessagesString: string | null = window.localStorage.getItem("dateCityMessages");
@@ -571,7 +570,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="justify-center flex md:hidden">
                   <Link
-                    href={`https://openrouter.ai/auth?callback_url=${callbackUrl}`}
+                    href={`https://openrouter.ai/auth?callback_url=${callbackUrl}&code_challenge=${codeChallenge}&code_challenge_method=S256`}
                     rel="noopener noreferrer"
                     className="underline font-semibold"
                   >
